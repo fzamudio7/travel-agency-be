@@ -1,31 +1,25 @@
 package main
 
 import (
-	"errors"
-	"fmt"
 	"net/http"
+
+	"github.com/labstack/echo/v4"
 )
 
-const serverPort = 3333
+const serverPort = "3333"
+
+type Airline struct {
+	Name string `json:"name"`
+}
+
+func getMessage(c echo.Context) error {
+	airline := &Airline{Name: "Delta"}
+	return c.JSON(http.StatusOK, airline)
+}
 
 func main() {
+	e := echo.New()
+	e.GET("/message", getMessage)
 
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "GET" {
-			fmt.Printf("server: %s /\n", r.Method)
-			fmt.Fprintf(w, `{"airline": "delta"}`)
-		}
-
-	})
-	server := http.Server{
-		Addr:    fmt.Sprintf(":%d", serverPort),
-		Handler: mux,
-	}
-	if err := server.ListenAndServe(); err != nil {
-		if !errors.Is(err, http.ErrServerClosed) {
-			fmt.Printf("error running http server: %s\n", err)
-		}
-	}
-
+	e.Logger.Fatal(e.Start(":" + serverPort))
 }
