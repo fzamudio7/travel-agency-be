@@ -1,31 +1,18 @@
 package main
 
 import (
-	"errors"
-	"fmt"
 	"net/http"
+
+	"github.com/labstack/echo/v4"
 )
 
-const serverPort = 3333
+const serverPort = "3333"
 
 func main() {
-
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "GET" {
-			fmt.Printf("server: %s /\n", r.Method)
-			fmt.Fprintf(w, `{"airline": "delta"}`)
-		}
-
+	e := echo.New()
+	e.GET("/", func(c echo.Context) error {
+		return c.String(http.StatusOK, "Hello, World!")
 	})
-	server := http.Server{
-		Addr:    fmt.Sprintf(":%d", serverPort),
-		Handler: mux,
-	}
-	if err := server.ListenAndServe(); err != nil {
-		if !errors.Is(err, http.ErrServerClosed) {
-			fmt.Printf("error running http server: %s\n", err)
-		}
-	}
 
+	e.Logger.Fatal(e.Start(":" + serverPort))
 }
