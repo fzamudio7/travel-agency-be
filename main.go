@@ -8,9 +8,15 @@ import (
 
 const serverPort = "3333"
 
-func getMessage(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World!")
+type Airline struct {
+	Name string `json:"name"`
 }
+
+func getMessage(c echo.Context) error {
+	airline := &Airline{Name: "Delta"}
+	return c.JSON(http.StatusOK, airline)
+}
+
 func main() {
 	e := echo.New()
 	e.GET("/message", getMessage)
