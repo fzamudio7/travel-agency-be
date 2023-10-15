@@ -1,0 +1,29 @@
+# API version number you are trying to use
+apiVersion: v1
+# Type of file to create
+kind: ReplicationController
+# replication controller data
+metadata:
+    # Replication Controller name
+    name: rc-travel-agency-backend
+# The specification of the desired state we want the pod to have.
+spec:
+    # Number of replicas that we want rc to be responsible for maintaining. (This will create a pod)
+    replicas: 1
+    # This property indicates all the pods that this replication controller will be in charge of managing. In this case, it will be in charge of all the ones that have the value "t-a-b" in the "app" label.
+    selector:
+        app: t-a-b
+    # This property has the same schema as a pod , except that because its nested it does not require an "apiVersion" or a "kind"
+    template:
+        metadata:
+            name: pod-travel-agency-backend
+            labels:
+                app: t-a-b
+        spec:
+            containers:
+                - name: docker-travel-agency-backend
+                  image: docker-travel-agency-backend
+                  # never pull the image policy
+                  imagePullPolicy: Never
+                  ports:
+                    - containerPort: 3333

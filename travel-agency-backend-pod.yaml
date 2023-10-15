@@ -1,0 +1,22 @@
+# Number of thre API version we want to use
+apiVersion: v1
+# Type of file to create
+kind: Pod
+# Data of the pod like name and label
+metadata:
+    name: my-travel-agency-backend
+    # Especificamos que el pod tenga un label con clave "app" y valor "nginx"
+    labels:
+        app: api
+# specification of the pod
+spec:
+    # cotainers the form the pod. They are all visible by localhost
+    containers:
+        - name: docker-travel-agency-backend
+          image: docker-travel-agency-backend
+          # never pull the image policy
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3333
+    # Here we define the rrstauration policy in case the pod stops or cannot longer execute beacuse of an interal error.
+    restartPolicy: Always

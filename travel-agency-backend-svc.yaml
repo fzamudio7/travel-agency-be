@@ -1,0 +1,17 @@
+# API version number you are trying to use
+apiVersion: v1
+# Type of file to create
+kind: Service
+#Name of the service
+metadata:
+    name: service-travel-agency-backend
+# Pod especification
+spec:
+    type: NodePort # A port is opened on each node in your cluster via Kube proxy.
+    #In this property we indicate all the pods the point to this service. In this case, it will be in charge of all the onces that have the value "t-a-b" for the "app" label
+    selector:
+        app:  t-a-b
+    ports:
+      # Indica el puerto en el que se debería de servir este servicio
+      - port: 3333
+        targetPort: 3333
